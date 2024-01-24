@@ -14,10 +14,10 @@ import MenuItem from '@mui/material/MenuItem';
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function Header({setOpen,open,hospitalviewResponse}) {
+function Header({ setOpen, open, hospitalviewResponse }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-console.log("Header",open);
+  console.log("Header", open);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -38,10 +38,10 @@ console.log("Header",open);
       <Container maxWidth="xl">
         <Toolbar disableGutters>
 
-  
-     <div onClick={()=>setOpen(!open)} className='header-menu-icon me-3'><i class="ri-menu-line"></i></div>
-      
-   <Typography
+
+          <div onClick={() => setOpen(!open)} className='header-menu-icon me-3'><i class="ri-menu-line"></i></div>
+
+          <Typography
             variant="h6"
             noWrap
             component="a"

@@ -15,7 +15,6 @@ function Donate() {
     setOpen(newOpen);
   };
 
-
   const { personviewresponse, setPersonviewresponse } = useContext(personViewContext)
   return (
     <div>

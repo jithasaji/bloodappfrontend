@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
 import './RequestBlood.css'
 import blood from '../Assets/blood.jpg'
+import { requestbloodAPI } from '../Services/allAPI'
 
 export default function RequestBlood() {
 
     const [selectedBloodGroup, setSelectedBloodGroup] = useState("BloodGroup")
     const [hover, setHover] = useState(false)
     const [usertype, setUserType] = useState("User")
+    const [requestData, setRequestdata] = useState({
+
+        personname: "",
+        location: "",
+        bloodgroup: "",
+        bloodunit: "",
+        requestStatus: "pending"
+    })
+
     console.log(hover);
 
     const handleChangeUser = (res) => {
@@ -20,41 +30,47 @@ export default function RequestBlood() {
     const handleOptionSelect = (val) => {
         setSelectedBloodGroup(val)
         setOpen(!open)
+        setRequestdata({ ...requestData, bloodgroup: val })
     }
+    console.log(requestData);
 
+    const Handlesubmit = async (e) => {
+        e.preventDefault()
+        const token = sessionStorage.getItem('token')
+        const reqHeader = {
+
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+
+        const { personname, location, bloodgroup, bloodunit } = requestData
+
+        if (!personname || !location || !bloodgroup || !bloodunit  ) {
+            alert("please fill completely !!!!")
+        } else {
+
+            const receive = await requestbloodAPI(requestData, reqHeader)
+            console.log(receive);
+        }
+    }
     return (
         <div>
             <div className="request-blood">
                 <img src={blood} alt="request-blood image" className="request-blood__img" />
-                <form action="" className="request-blood__form">
+                <form onSubmit={Handlesubmit} action="" className="request-blood__form">
                     <h1 className="request-blood__title">Request Blood</h1>
                     <div className="request-blood__content">
                         <div className="request-blood__box">
                             <i className="ri-user-3-line request-blood__icon"></i>
                             <div className="request-blood__box-input">
-                                <input type="Full Name" required className="request-blood__input" id="request-blood-email" placeholder=" " />
-                                <label for="request-blood-email" className="request-blood__label">{usertype === "Person" ? "Full Name" : "Hospital Name"}</label>
-                            </div>
-                        </div>
-                        <div className="request-blood__box">
-                            <i class="ri-mail-fill"></i>
-                            <div className="request-blood__box-input">
-                                <input type="email" required className="request-blood__input" id="request-blood-email" placeholder=" " />
-                                <label for="request-blood-email" className="request-blood__label">Email</label>
-                            </div>
-                        </div>
-                        <div className="request-blood__box">
-                            <i class="ri-lock-line"></i>
-
-                            <div className="request-blood__box-input">
-                                <input type="password" required className="request-blood__input" id="request-blood-email" placeholder=" " />
-                                <label for="request-blood-email" className="request-blood__label">Password</label>
+                                <input onChange={(e) => setRequestdata({ ...requestData, personname: e.target.value })} type="Full Name" required className="request-blood__input" id="request-blood-email" placeholder=" " />
+                                <label for="request-blood-email" className="request-blood__label">{usertype === "Person" ? "Full Name" : "Person Name"}</label>
                             </div>
                         </div>
                         <div className="request-blood__box">
                             <i class="ri-map-pin-fill"></i>
                             <div className="request-blood__box-input">
-                                <input type="Location" required className="request-blood__input" id="request-blood-email" placeholder=" " />
+                                <input onChange={(e) => setRequestdata({ ...requestData, location: e.target.value })} type="Location" required className="request-blood__input" id="request-blood-email" placeholder=" " />
                                 <label for="request-blood-email" className="request-blood__label">Location</label>
                             </div>
                         </div>
@@ -69,9 +85,11 @@ export default function RequestBlood() {
                                         <i class="ri-arrow-down-s-line"></i>
                                     </div>
                                 </div>
+
                                 {
                                     open === true &&
                                     <ul style={{ margin: "0", padding: '12px' }} className='dropdown-content'>
+
                                         <li onClick={() => { handleOptionSelect("A +ve") }}>'A' +ve</li>
                                         <li onClick={() => { handleOptionSelect("B +ve") }}>'B' +ve</li>
                                         <li onClick={() => { handleOptionSelect("O +ve") }}>'O' +ve</li>
@@ -80,8 +98,16 @@ export default function RequestBlood() {
                                         <li onClick={() => { handleOptionSelect("B -ve") }}>'B' -ve</li>
                                         <li onClick={() => { handleOptionSelect("O -ve") }}>'O' -ve</li>
                                         <li onClick={() => { handleOptionSelect("AB -ve") }}>'AB' -ve</li>
+
                                     </ul>
                                 }
+                            </div>
+                        </div>
+                        <div className="request-blood__box">
+                            <i class="ri-heart-pulse-fill"></i>
+                            <div className="request-blood__box-input">
+                                <input onChange={(e) => setRequestdata({ ...requestData, bloodunit: e.target.value })} type="Location" required className="request-blood__input" id="request-blood-email" placeholder=" " />
+                                <label for="request-blood-email" className="request-blood__label"> Blood Unit</label>
                             </div>
                         </div>
 

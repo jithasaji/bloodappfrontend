@@ -25,10 +25,13 @@ export default function Register() {
 
     e.preventDefault()
     const { username, email, password, location, bloodgroup, usertype } = userdata
-    // if(usertype==="hospital")
+    if(usertype==="person"){
+  
     if (!username || !email || !password || !location || !bloodgroup || !usertype) {
       alert("please fill the form completely!!!!")
+
     } else {
+
       const result = await registerAPI(userdata)
       // console.log(result.status);
       if (result.status === 200) {
@@ -40,6 +43,29 @@ export default function Register() {
       } else {
         alert(result.response.data)
       }
+
+    }
+  }
+    else{
+      if (!username || !email || !password || !location || !usertype) {
+        alert("please fill the form completely!!!!")
+  
+      } else {
+  
+        const result = await registerAPI(userdata)
+        // console.log(result.status);
+        if (result.status === 200) {
+          alert(`${result.data.username} registered successfully!!!`)
+          setUserData({
+            username: "", email: "", password: "", bloodgroup: "", usertype: "", location: ""
+          })
+          navigate("/Login")
+        } else {
+          alert(result.response.data)
+        }
+  
+      }
+  
 
     }
   }
